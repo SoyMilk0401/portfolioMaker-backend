@@ -12,7 +12,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Portfolio {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 
@@ -33,7 +34,7 @@ public class Portfolio {
     private String phone;
     private String education;
     private String githubUsername;
-    private String photoUrl; // 프론트의 photo
+    private String photoUrl;
 
 
     @Column(columnDefinition = "TEXT")

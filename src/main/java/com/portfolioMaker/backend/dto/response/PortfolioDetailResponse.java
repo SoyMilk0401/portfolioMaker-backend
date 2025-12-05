@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class PortfolioDetailResponse {
 
     private Long id;
+    private String username;
     private DescriptionDto description;
     private UserInfoDto userInfo;
     private Object techStack;
@@ -22,7 +23,7 @@ public class PortfolioDetailResponse {
 
     public PortfolioDetailResponse(Portfolio entity, Object techStackObj) {
         this.id = entity.getId();
-        this.techStack = techStackObj; // 서비스에서 변환해서 넘겨줌
+        this.username = entity.getMember().getUsername();
 
         this.description = new DescriptionDto(entity.getTitle(), entity.getDescription());
 
@@ -31,12 +32,14 @@ public class PortfolioDetailResponse {
                 entity.getPhone(), entity.getEducation(), entity.getGithubUsername(), entity.getPhotoUrl()
         );
 
-        this.projects = entity.getProjects().stream()
-                .map(ProjectDto::new)
-                .collect(Collectors.toList());
+        this.techStack = techStackObj;
 
         this.relatedLinks = entity.getRelatedLinks().stream()
                 .map(LinkDto::new)
+                .collect(Collectors.toList());
+
+        this.projects = entity.getProjects().stream()
+                .map(ProjectDto::new)
                 .collect(Collectors.toList());
     }
 

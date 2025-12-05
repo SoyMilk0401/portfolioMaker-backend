@@ -45,4 +45,16 @@ public class AuthService {
 
         return jwtTokenProvider.createToken(member.getUsername());
     }
+
+    @Transactional
+    public void leave(String username, String password) {
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        if (!passwordEncoder.matches(password, member.getPassword())) {
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
+
+        memberRepository.delete(member);
+    }
 }
