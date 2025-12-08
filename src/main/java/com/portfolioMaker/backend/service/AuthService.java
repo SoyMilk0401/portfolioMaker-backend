@@ -37,10 +37,10 @@ public class AuthService {
     @Transactional(readOnly = true)
     public String login(LoginRequest request) {
         Member member = memberRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new RuntimeException("가입되지 않은 아이디입니다."));
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 아이디입니다. 다시 확인해주세요."));
 
         if (!passwordEncoder.matches(request.getPassword(), member.getPassword())) {
-            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+            throw new RuntimeException("비밀번호가 틀렸습니다. 다시 입력해주세요.");
         }
 
         return jwtTokenProvider.createToken(member.getUsername());

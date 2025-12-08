@@ -20,23 +20,34 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody SignupRequest request) {
-        authService.signup(request);
-        return ResponseEntity.ok("회원가입 완료");
+    public ResponseEntity<?> signup(@RequestBody SignupRequest request) {
+        try {
+            authService.signup(request);
+            return ResponseEntity.ok("회원가입 완료");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        String token = authService.login(request);
-        return ResponseEntity.ok(Map.of("token", token));
+        try {
+            String token = authService.login(request);
+            return ResponseEntity.ok(Map.of("token", token));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
     }
 
     @DeleteMapping("/me")
-    public ResponseEntity<String> leave(
+    public ResponseEntity<?> leave(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody LeaveRequest request) {
-
-        authService.leave(userDetails.getUsername(), request.getPassword());
-        return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
+        try {
+            authService.leave(userDetails.getUsername(), request.getPassword());
+            return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
     }
 }
