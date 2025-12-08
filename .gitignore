@@ -39,3 +39,7 @@ out/
 ### H2 Database file ###
 db/
 *.db
+
+### Local Env Files ###
+.env
+.env.*

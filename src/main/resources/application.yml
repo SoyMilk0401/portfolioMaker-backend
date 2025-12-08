@@ -3,8 +3,12 @@ spring:
     active: local
 
 jwt:
-  secret: YUhSMGNITTZMeTluYVhSb2RXSXVZMjl0TDFOdmVVMXBiR3N3TkRBeEwzQnZjblJtYjJ4cGIwMWhhMlZ5
+  secret: ${JWT_SECRET}
   expiration: 86400000
+
+gemini:
+  api-key: ${GEMINI_API_KEY}
+  url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent"
 
 ---
 spring:
@@ -38,9 +42,9 @@ spring:
       on-profile: prod
 
   datasource:
-    url: jdbc:mysql://localhost:3306/portfolio_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: root
-    password: 1234
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
