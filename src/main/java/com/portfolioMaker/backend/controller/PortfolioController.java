@@ -1,7 +1,6 @@
 package com.portfolioMaker.backend.controller;
 
 import com.portfolioMaker.backend.dto.request.PortfolioSaveRequest;
-import com.portfolioMaker.backend.dto.response.PortfolioDetailResponse;
 import com.portfolioMaker.backend.service.PortfolioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/portfolios")
@@ -19,50 +18,70 @@ public class PortfolioController {
     private final PortfolioService portfolioService;
 
     @PostMapping
-    public ResponseEntity<Long> createPortfolio(
+    public ResponseEntity<?> createPortfolio(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody PortfolioSaveRequest requestDto) {
-
-        Long savedId = portfolioService.createPortfolio(userDetails.getUsername(), requestDto);
-        return ResponseEntity.ok(savedId);
+        try {
+            Long savedId = portfolioService.createPortfolio(userDetails.getUsername(), requestDto);
+            return ResponseEntity.ok(savedId);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updatePortfolio(
+    public ResponseEntity<?> updatePortfolio(
             @PathVariable Long id,
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody PortfolioSaveRequest requestDto) {
-
-        portfolioService.updatePortfolio(id, userDetails.getUsername(), requestDto);
-        return ResponseEntity.ok("포트폴리오 수정 완료");
+        try {
+            portfolioService.updatePortfolio(id, userDetails.getUsername(), requestDto);
+            return ResponseEntity.ok("포트폴리오 수정 완료");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PortfolioDetailResponse> getPortfolio(@PathVariable Long id) {
-        return ResponseEntity.ok(portfolioService.getPortfolio(id));
+    public ResponseEntity<?> getPortfolio(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(portfolioService.getPortfolio(id));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
     }
 
     @GetMapping("/my")
-    public ResponseEntity<List<PortfolioDetailResponse>> getMyPortfolios(
+    public ResponseEntity<?> getMyPortfolios(
             @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails == null) {
-            return ResponseEntity.status(401).build();
+            return ResponseEntity.status(401).body(Map.of("message", "로그인이 필요합니다."));
         }
-        return ResponseEntity.ok(portfolioService.getMyPortfolios(userDetails.getUsername()));
+        try {
+            return ResponseEntity.ok(portfolioService.getMyPortfolios(userDetails.getUsername()));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
     }
 
     @GetMapping
-    public ResponseEntity<List<PortfolioDetailResponse>> getAllPortfolios() {
-        return ResponseEntity.ok(portfolioService.getAllPortfolios());
+    public ResponseEntity<?> getAllPortfolios() {
+        try {
+            return ResponseEntity.ok(portfolioService.getAllPortfolios());
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePortfolio(
+    public ResponseEntity<?> deletePortfolio(
             @PathVariable Long id,
             @AuthenticationPrincipal UserDetails userDetails) {
-
-        portfolioService.deletePortfolio(id, userDetails.getUsername());
-        return ResponseEntity.ok("포트폴리오 삭제 완료");
+        try {
+            portfolioService.deletePortfolio(id, userDetails.getUsername());
+            return ResponseEntity.ok("포트폴리오 삭제 완료");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
     }
-
 }

@@ -4,6 +4,7 @@ import com.portfolioMaker.backend.dto.request.LeaveRequest;
 import com.portfolioMaker.backend.dto.request.LoginRequest;
 import com.portfolioMaker.backend.dto.request.SignupRequest;
 import com.portfolioMaker.backend.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,7 +21,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody SignupRequest request) {
+    public ResponseEntity<?> signup(@Valid @RequestBody SignupRequest request) {
         try {
             authService.signup(request);
             return ResponseEntity.ok("회원가입 완료");
