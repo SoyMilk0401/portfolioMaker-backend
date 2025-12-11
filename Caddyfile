@@ -1,0 +1,8 @@
+{
+	http_port 5412
+	https_port 5413
+}
+
+hunpu.asuscomm.com {
+	reverse_proxy localhost:8080
+}
