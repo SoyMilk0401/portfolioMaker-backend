@@ -2,6 +2,8 @@
 
 개발자 포트폴리오를 쉽고 빠르게 생성하고, Google Gemini AI를 통해 포트폴리오에 대한 구체적인 피드백과 조언을 받을 수 있는 REST API 서버입니다.
 
+![poster](https://github.com/SoyMilk0401/portfolioMaker-backend/blob/main/Architecture%20Diagram.png?raw=true)
+
 ## 주요 기능
 
 ### 1. 사용자 인증 (Authentication)
